@@ -154,7 +154,7 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
       .append('text')
       .attr('text-anchor', 'middle')
       .attr('dy', 0)
-      .text((d) => d.name)
+      .text((d) => d.label ?? d.name)
       .attr('class', (d) => `label label-${d.id}`)
       .attr('fill', (d) =>
         d.id === selectedNodeId ? graphSettings.focusColor : graphSettings.nodeColor,
