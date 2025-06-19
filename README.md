@@ -82,16 +82,17 @@ export default () => (
 
 ## API
 
-| 属性                  | 说明            | 类型                   | 默认值 |
-| --------------------- | --------------- | ---------------------- | ------ |
-| nodes                 | 节点数据        | `Node[]`               | 必填   |
-| edges                 | 边数据          | `Edge[]`               | 必填   |
-| selectedNodeId        | 当前高亮节点 id | `string`               | -      |
-| defaultSelectedNodeId | 默认高亮节点 id | `string`               | -      |
-| onSelectNode          | 节点点击回调    | `(id: string) => void` | -      |
-| width                 | 画布宽度        | `number`               | 800    |
-| height                | 画布高度        | `number`               | 600    |
-| graphSettings         | 主题与样式配置  | `GraphSettings`        | 见下表 |
+| 属性                  | 说明            | 类型                   | 默认值 | 版本  |
+| --------------------- | --------------- | ---------------------- | ------ | ----- |
+| nodes                 | 节点数据        | `Node[]`               | 必填   | -     |
+| edges                 | 边数据          | `Edge[]`               | 必填   | -     |
+| selectedNodeId        | 当前高亮节点 id | `string`               | -      | -     |
+| defaultSelectedNodeId | 默认高亮节点 id | `string`               | -      | -     |
+| onSelectNode          | 节点点击回调    | `(id: string) => void` | -      | -     |
+| width                 | 画布宽度        | `number`               | 800    | -     |
+| height                | 画布高度        | `number`               | 600    | -     |
+| filterOrphan          | 过滤孤立节点    | `boolean`              | false  | 1.1.0 |
+| graphSettings         | 主题与样式配置  | `GraphSettings`        | 见下表 | -     |
 
 ### GraphSettings 可配置项
 
