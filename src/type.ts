@@ -26,54 +26,24 @@ export interface DirectedGraphVisualizerProps<N extends Node = Node, E extends E
 }
 
 export interface GraphSettings {
-  /**
-   * Background color of the graph.
-   * @default '#fff'
-   */
+  // 背景
   bg?: string;
-  /**
-   * Color of the focused node.
-   * @default '#f90'
-   */
+  // 聚焦节点颜色
   focusColor?: string;
-  /**
-   * Default color of nodes.
-   * @default '#69b3a2'
-   */
+  // 节点颜色
   nodeColor?: string;
-  /**
-   * Color of the edges.
-   * @default '#d3d3d3'
-   */
+  // 边颜色
   linkColor?: string;
-  /**
-   * Color of the edges when not focused.
-   * @default '#d3d3d3'
-   */
+  // 灰色
   grayColor?: string;
-  /**
-   * Color of the node when hovered.
-   * @default '#ff5252'
-   */
+  // 鼠标悬停时的颜色
   hoverColor?: string;
-  /**
-   * Default font size for the graph.
-   * @default 16
-   */
+  // 字体大小
   fontSize?: number;
-  /**
-   * Font size when hovering over a node.
-   * @default 24
-   */
+  // 鼠标悬停时的字体大小
   hoverFontSize?: number;
-  /**
-   * Color of the edges for outgoing connections.
-   * @default '#4caf50'
-   */
+  // 出边颜色
   graphOutColor?: string;
-  /**
-   * Color of the edges for incoming connections.
-   * @default '#21e5f3'
-   */
+  // 入边颜色
   graphInColor?: string;
 }

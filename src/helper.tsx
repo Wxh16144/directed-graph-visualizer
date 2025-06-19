@@ -79,7 +79,7 @@ export function highlightGraph(
   g.selectAll('circle').each(function (nodeDatum: any) {
     if (relatedNodeIds.has(nodeDatum.id.toString())) {
       // 区分出入边模式下的节点颜色
-      let nodeColor = graphSettings.focusColor;
+      let nodeColor = graphSettings.hoverColor;
       if (mode === 'in') {
         nodeColor = graphSettings.graphInColor;
       } else if (mode === 'out') {
@@ -155,7 +155,7 @@ export function highlightGraph(
       }
       // 高亮两端节点和 label
       if (sourceId) {
-        let nodeColor = graphSettings.focusColor;
+        let nodeColor = graphSettings.hoverColor;
         if (mode === 'in') {
           nodeColor = graphSettings.graphInColor;
         } else if (mode === 'out') {
@@ -168,7 +168,7 @@ export function highlightGraph(
           .attr('font-size', graphSettings.hoverFontSize);
       }
       if (targetId) {
-        let nodeColor = graphSettings.focusColor;
+        let nodeColor = graphSettings.hoverColor;
         if (mode === 'in') {
           nodeColor = graphSettings.graphInColor;
         } else if (mode === 'out') {
