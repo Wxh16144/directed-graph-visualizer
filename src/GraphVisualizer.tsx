@@ -27,6 +27,7 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
   width = 800,
   height = 600,
   graphSettings: propGraphSettings,
+  filterOrphan,
 }) => {
   const graphSettings = { ...defaultGraphSettings, ...propGraphSettings };
   const NODE_RADIUS = 16;
@@ -74,24 +75,35 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
 
   // ========== Filter Nodes and Edges ==========
   const filtered = React.useMemo(() => {
-    if (!selectedNodeId) return { nodes, edges };
+    let filteredNodes = nodes;
+    let filteredEdges = edges;
+    if (filterOrphan) {
+      // 统计所有有入边或出边的节点
+      const connected = new Set<string>();
+      edges.forEach((e) => {
+        connected.add(e.source);
+        connected.add(e.target);
+      });
+      filteredNodes = nodes.filter((n) => connected.has(n.id));
+      filteredEdges = edges.filter((e) => connected.has(e.source) && connected.has(e.target));
+    }
+    if (!selectedNodeId) return { nodes: filteredNodes, edges: filteredEdges };
     const nodeSet = new Set<string>();
     nodeSet.add(selectedNodeId);
-    edges.forEach((e) => {
+    filteredEdges.forEach((e) => {
       if (e.source === selectedNodeId) nodeSet.add(e.target);
       if (e.target === selectedNodeId) nodeSet.add(e.source);
     });
-
-    const filteredNodes = nodes.filter((n) => nodeSet.has(n.id));
-    const filteredEdges = edges.filter(
-      (e) =>
-        nodeSet.has(e.source) &&
-        nodeSet.has(e.target) &&
-        (e.source === selectedNodeId || e.target === selectedNodeId),
-    );
-
-    return { nodes: filteredNodes, edges: filteredEdges };
-  }, [nodes, edges, selectedNodeId]);
+    return {
+      nodes: filteredNodes.filter((n) => nodeSet.has(n.id)),
+      edges: filteredEdges.filter(
+        (e) =>
+          nodeSet.has(e.source) &&
+          nodeSet.has(e.target) &&
+          (e.source === selectedNodeId || e.target === selectedNodeId),
+      ),
+    };
+  }, [nodes, edges, selectedNodeId, filterOrphan]);
 
   // ========== D3 Visualization ==========
   const createGraphSimulation = useEvent(() => {

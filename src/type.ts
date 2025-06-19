@@ -23,6 +23,8 @@ export interface DirectedGraphVisualizerProps<N extends Node = Node, E extends E
   width?: number;
   height?: number;
   graphSettings?: GraphSettings;
+  /** 是否过滤掉没有入边和出边的孤立节点 */
+  filterOrphan?: boolean;
 }
 
 export interface GraphSettings {
