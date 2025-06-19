@@ -1,6 +1,6 @@
 {
   "name": "react-directed-graph-visualizer",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A React component for interactive, customizable, and theme-friendly directed graph visualization based on D3.js. Supports node focus, keyboard navigation.",
   "keywords": [
     "d3",
