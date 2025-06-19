@@ -10,8 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "ahooks": "^3.8.5",
+    "antd": "^5.26.1",
+    "normalize.css": "^8.0.1",
     "react": "^19.1.0",
-    "react-directed-graph-visualizer": "workspace:0.0.1-beta.1",
+    "react-directed-graph-visualizer": "workspace:*",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
