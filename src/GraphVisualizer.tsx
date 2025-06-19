@@ -6,16 +6,16 @@ import { cloneGraphData, highlightGraph } from './helper';
 import { DirectedGraphVisualizerProps, GraphSettings } from './type';
 
 const defaultGraphSettings: Required<GraphSettings> = {
-  bg: '#fff',
-  focusColor: '#f90',
-  nodeColor: '#69b3a2',
-  linkColor: '#d3d3d3',
-  grayColor: '#d3d3d3',
-  hoverColor: '#ff5252',
+  bg: 'white', // 背景色
+  focusColor: 'orange', // 选中节点高亮色
+  nodeColor: 'mediumseagreen', // 普通节点色
+  linkColor: 'slategray', // 普通边色
+  grayColor: 'lightgray', // 非高亮节点/边色
+  hoverColor: 'crimson', // 鼠标悬浮高亮色
   fontSize: 16,
   hoverFontSize: 24,
-  graphOutColor: '#4caf50',
-  graphInColor: '#21e5f3',
+  graphOutColor: 'royalblue', // 出边高亮色
+  graphInColor: 'goldenrod', // 入边高亮色
 };
 
 const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
