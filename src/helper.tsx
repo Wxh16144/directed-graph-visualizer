@@ -193,3 +193,15 @@ export function highlightGraph(
     }
   });
 }
+
+export function cloneGraphData(nodes: any[], edges: any[]) {
+  const clonedNodes =
+    typeof structuredClone === 'function'
+      ? structuredClone(nodes)
+      : JSON.parse(JSON.stringify(nodes));
+  const clonedEdges =
+    typeof structuredClone === 'function'
+      ? structuredClone(edges)
+      : JSON.parse(JSON.stringify(edges));
+  return { clonedNodes, clonedEdges };
+}

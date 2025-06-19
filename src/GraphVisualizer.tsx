@@ -2,7 +2,7 @@
 import * as d3 from 'd3';
 import { useEvent, useMergedState } from 'rc-util';
 import React, { useEffect, useRef } from 'react';
-import { highlightGraph } from './helper';
+import { cloneGraphData, highlightGraph } from './helper';
 import { DirectedGraphVisualizerProps, GraphSettings } from './type';
 
 const defaultGraphSettings: Required<GraphSettings> = {
@@ -50,6 +50,12 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Shift') refMode.current = 'referred';
       if (event.key === 'Control') refMode.current = 'refer';
+
+      // esc 键清除选中状态
+      if (event.key === 'Escape') {
+        setSelectedNodeId(undefined);
+        refMode.current = 'none';
+      }
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
@@ -92,6 +98,9 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     const svg = d3.select(svgRef.current!);
     svg.selectAll('*').remove();
 
+    // 深拷贝 nodes 和 edges，避免 d3 forceSimulation 修改原数据
+    const { clonedNodes, clonedEdges } = cloneGraphData(filtered.nodes, filtered.edges);
+
     // 缩放/平移
     const g = svg.append('g');
     svg.call(
@@ -104,11 +113,11 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     );
 
     const simulation = d3
-      .forceSimulation<any>(filtered.nodes)
+      .forceSimulation<any>(clonedNodes)
       .force(
         'link',
         d3
-          .forceLink(filtered.edges)
+          .forceLink(clonedEdges)
           .id((d: any) => d.id)
           .distance(120),
       )
@@ -121,13 +130,13 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
       .attr('stroke', graphSettings.linkColor)
       .attr('stroke-opacity', 0.6)
       .selectAll('line')
-      .data(filtered.edges)
+      .data(clonedEdges as any[])
       .enter()
       .append('line')
       .attr('marker-end', 'url(#arrow)')
       .attr('class', (d) => {
-        const sourceId = d.source;
-        const targetId = d.source;
+        const sourceId = typeof d.source === 'object' ? d.source.id : d.source;
+        const targetId = typeof d.target === 'object' ? d.target.id : d.target;
         return `link link-${sourceId}-${targetId}`;
       });
 
@@ -135,7 +144,7 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     const nodeGroup = g
       .append('g')
       .selectAll('g')
-      .data(filtered.nodes)
+      .data(clonedNodes as any[])
       .enter()
       .append('g')
       .attr('class', (d) => `node-group node-group-${d.id}`);
@@ -211,13 +220,13 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
 
     simulation.on('tick', () => {
       link
-        .attr('x1', (d: any) => d.source.x)
-        .attr('y1', (d: any) => d.source.y)
-        .attr('x2', (d: any) => d.target.x)
-        .attr('y2', (d: any) => d.target.y);
+        .attr('x1', (d) => (typeof d.source === 'object' ? d.source.x : null))
+        .attr('y1', (d) => (typeof d.source === 'object' ? d.source.y : null))
+        .attr('x2', (d) => (typeof d.target === 'object' ? d.target.x : null))
+        .attr('y2', (d) => (typeof d.target === 'object' ? d.target.y : null));
 
-      node.attr('cx', (d: any) => d.x).attr('cy', (d: any) => d.y);
-      label.attr('x', (d: any) => d.x).attr('y', (d: any) => d.y + 36); // label below node
+      node.attr('cx', (d) => d.x).attr('cy', (d) => d.y);
+      label.attr('x', (d) => d.x).attr('y', (d) => d.y + 36); // label below node
     });
 
     return function cleanup() {
@@ -227,7 +236,8 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     };
   });
 
-  useEffect(createGraphSimulation, [filtered, width, height, selectedNodeId, graphSettings]);
+  const normalizeSettings = JSON.stringify(graphSettings);
+  useEffect(createGraphSimulation, [filtered, width, height, selectedNodeId, normalizeSettings]);
 
   return (
     <svg ref={svgRef} width={width} height={height} style={{ background: graphSettings.bg }} />
