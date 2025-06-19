@@ -2,6 +2,6 @@
 
 exports[`export > should work 1`] = `
 [
-  "version",
+  "DirectedGraphVisualizer",
 ]
 `;

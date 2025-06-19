@@ -38,14 +38,15 @@
 
 ## 简介
 
-基于 Ant Design 的 Modal 组件的二次封装，简化了 Modal 的使用方式
+> 基于 D3.js 的 React 有向图可视化组件，支持节点高亮、键盘导航、主题自定义，适用于交互式数据可视化场景。
 
-- 支持 antd4.x 和 antd5.x, API 保持一致
-- 自动绑定打开事件, 无需维护 open 状态
-- content 增强, 支持内部手动关闭
-- 支持拖拽, 类 window 窗口
-- 可直接对接 antd-mobile 的 Mask, Modal, Popup, Dialog 组件
-- 长期维护 (欢迎 PR)
+### 功能特性
+
+- 支持节点/边高亮、出入边模式
+- 键盘 Shift/Control 辅助高亮出入边
+- 支持自定义主题和样式
+- 支持节点拖拽、缩放、平移
+- 适合大规模有向图的交互分析
 
 ## 快速上手
 
@@ -57,18 +58,55 @@
 pnpm i react-directed-graph-visualizer -S
 ```
 
-### 使用
+### 使用示例
 
 ```tsx | pure
-import { Button } from 'antd';
-import Modal from 'react-directed-graph-visualizer';
+import { DirectedGraphVisualizer } from 'react-directed-graph-visualizer';
+
+const nodes = [
+  { id: '1', label: '节点1' },
+  { id: '2', label: '节点2' },
+];
+const edges = [{ source: '1', target: '2' }];
 
 export default () => (
-  <Modal title="react-directed-graph-visualizer" trigger={<Button type="primary">Click Me</Button>}>
-    I ❤️ antd
-  </Modal>
+  <DirectedGraphVisualizer
+    nodes={nodes}
+    edges={edges}
+    width={800}
+    height={600}
+    onSelectNode={(id) => console.log('选中节点', id)}
+  />
 );
 ```
+
+## API
+
+| 属性                  | 说明            | 类型                   | 默认值 |
+| --------------------- | --------------- | ---------------------- | ------ |
+| nodes                 | 节点数据        | `Node[]`               | 必填   |
+| edges                 | 边数据          | `Edge[]`               | 必填   |
+| selectedNodeId        | 当前高亮节点 id | `string`               | -      |
+| defaultSelectedNodeId | 默认高亮节点 id | `string`               | -      |
+| onSelectNode          | 节点点击回调    | `(id: string) => void` | -      |
+| width                 | 画布宽度        | `number`               | 800    |
+| height                | 画布高度        | `number`               | 600    |
+| graphSettings         | 主题与样式配置  | `GraphSettings`        | 见下表 |
+
+### GraphSettings 可配置项
+
+| 属性          | 说明         | 类型   | 默认值         |
+| ------------- | ------------ | ------ | -------------- |
+| bg            | 背景色       | string | white          |
+| focusColor    | 选中节点色   | string | orange         |
+| nodeColor     | 普通节点色   | string | mediumseagreen |
+| linkColor     | 普通边色     | string | slategray      |
+| grayColor     | 非高亮色     | string | lightgray      |
+| hoverColor    | 悬浮高亮色   | string | crimson        |
+| fontSize      | 字体大小     | number | 16             |
+| hoverFontSize | 悬浮字体大小 | number | 24             |
+| graphOutColor | 出边高亮色   | string | royalblue      |
+| graphInColor  | 入边高亮色   | string | goldenrod      |
 
 ## 迭代记录
 
@@ -76,7 +114,7 @@ export default () => (
 
 ## License
 
-Copyright © 2023 - present [Wxh16144][profile-url]. <br />
+Copyright © 2025 - present [Wxh16144][profile-url].  
 This project is [MIT](./LICENSE) licensed.
 
 <!-- LINK GROUP -->
