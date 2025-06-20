@@ -96,6 +96,33 @@ describe('GraphVisualizer', () => {
     });
   });
 
+  describe('filterOrphan implementation', () => {
+    it('should filter only nodes with no in or out edges (true orphan)', () => {
+      // a->b, b->c, d(孤立), e(只有出边), f(只有入边)
+      const nodes = [
+        { id: 'a', label: 'A' },
+        { id: 'b', label: 'B' },
+        { id: 'c', label: 'C' },
+        { id: 'd', label: 'D' }, // 真正孤立
+        { id: 'e', label: 'E' }, // 只有出边
+        { id: 'f', label: 'F' }, // 只有入边
+      ];
+      const edges = [
+        { source: 'a', target: 'b' },
+        { source: 'b', target: 'c' },
+        { source: 'e', target: 'b' }, // e只有出边
+        { source: 'a', target: 'f' }, // f只有入边
+      ];
+      const { container } = render(
+        <GraphVisualizer nodes={nodes} edges={edges} filterOrphan={true} />,
+      );
+      // d 是唯一真正的孤立点，应该被过滤，其余都应保留
+      expect(container.querySelectorAll('circle').length).toBe(5);
+      // 边数不变
+      expect(container.querySelectorAll('line').length).toBe(4);
+    });
+  });
+
   describe('hover with ctrl/shift', () => {
     let nodes: any[], edges: any[];
     beforeEach(async () => {
