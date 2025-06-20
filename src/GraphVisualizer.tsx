@@ -78,14 +78,13 @@ const GraphVisualizer: React.FC<DirectedGraphVisualizerProps> = ({
     let filteredNodes = nodes;
     let filteredEdges = edges;
     if (filterOrphan) {
-      // 统计所有有入边或出边的节点
-      const connected = new Set<string>();
+      const hasEdge = new Set<string>();
       edges.forEach((e) => {
-        connected.add(e.source);
-        connected.add(e.target);
+        hasEdge.add(e.source);
+        hasEdge.add(e.target);
       });
-      filteredNodes = nodes.filter((n) => connected.has(n.id));
-      filteredEdges = edges.filter((e) => connected.has(e.source) && connected.has(e.target));
+      filteredNodes = nodes.filter((n) => hasEdge.has(n.id));
+      filteredEdges = edges;
     }
     if (!selectedNodeId) return { nodes: filteredNodes, edges: filteredEdges };
     const nodeSet = new Set<string>();
